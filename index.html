@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .slide {
+            width: 500px;
+            height: 200px;
+            padding: 5px;
+            border: 1px solid #cccccc;
+            margin: 100px auto;
+            position: relative;
+        }
+
+        .screen {
+            width: 500px;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen ul {
+            width: 3000px;
+            position: relative;
+        }
+
+        .screen ul li {
+            list-style: none;
+            float: left;
+        }
+
+        .point {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            margin-left: -80px;
+        }
+
+        .point li {
+            float: left;
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            background-color: #000;
+            list-style: none;
+            line-height: 20px;
+            text-align: center;
+            color: #cccccc;
+            margin-right: 10px;
+        }
+
+        .point .active {
+            background-color: yellow;
+            color: #fff;
+        }
+
+        .btn {
+            width: 100%;
+            height: 50px;
+            position: absolute;
+            top: 50%;
+            margin-top: -25px;
+        }
+
+        .btn div {
+            position: absolute;
+            width: 35px;
+            height: 70px;
+            background-color: #666;
+            opacity: 0.7;
+            font-size: 20px;
+            color: #ffffff;
+            line-height: 70px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn div.left {
+            left: 0;
+        }
+
+        .btn div.right {
+            right: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="slide">
+    <div class="screen" id="screen">
+        <ul id="ul">
+            <li><a href="#"><img src="images/1.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/2.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/3.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/4.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/5.jpg" alt=""/></a></li>
+        </ul>
+        <div class="btn">
+            <div class="left" id='left'><</div>
+            <div class="right" id='right'>></div>
+        </div>
+    </div>
+    <div class="point">
+        <ul id="point">
+            <li class="active">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+    </div>
+
+</div>
+<script>
+    /*  //图片自动轮播
+     var screen = document.querySelector('.screen');
+     var width = screen.offsetWidth;
+     console.log(width);
+     var lis = screen.querySelectorAll('li');
+     var ul = screen.querySelector('ul');
+     var index = -1;
+     setInterval(function () {
+     index++;
+     if (index > 4) {
+     index = 0;
+     }
+     ul.style.left = -index * width + "px";
+     }, 2000)*/
+
+
+    function Slide(config) {
+        this._init(config)
+    }
+
+    Slide.prototype = {
+        constructor: Slide,
+        _init: function (config) {
+            this.movebox = document.getElementById(config.ulID);
+            this.outbox = document.getElementById(config.outer);
+            this.points = document.getElementById(config.pointId).children;
+            this.left = document.getElementById(config.lbtnId);
+            this.right = document.getElementById(config.rbtnId);
+            this.width = this.outbox.offsetWidth;
+            this.index = -1;
+            this.change();
+            this.lbtnclick();
+            this.rbtnclick();
+        },
+        change: function () {
+//            var index = -1;
+            var self = this;
+            setInterval(function () {
+                self.index++;
+                if (self.index > 4) {
+                    self.index = 0;
+                }
+                self.movebox.style.left = -self.index * self.width + "px";
+                self.pointchange(self.index);
+            }, 2000)
+        },
+        pointchange: function (index) {
+            var points = this.points;
+            for (var i = 0; i < points.length; i++) {
+                points[i].className = "";
+            }
+            points[index].className = "active";
+        },
+        lbtnclick: function () {
+            var self = this;
+            this.left.onclick = function () {
+                index++;
+                self.movebox.style.left = -index * self.width + "px";
+                self.pointchange(this.index)
+            }
+        },
+        rbtnclick: function () {
+            var self = this;
+            this.right.onclick = function () {
+                self.index++;
+                self.movebox.style.left = self.index * self.width + "px";
+                self.pointchange(self.index)
+            }
+        }
+    }
+
+    var slide = new Slide({
+        ulID: "ul",//移动的盒子
+        outer: "screen",//外面的盒子
+        pointId: "point",
+        lbtnId: 'left',
+        rbtnId: 'right',
+    })
+</script>
+</body>
+</html>
